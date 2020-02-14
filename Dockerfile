@@ -43,13 +43,14 @@ ENV PDB2PQR_BIN /root/pdb2pqr/pdb2pqr.py
 
 # DOWNLOAD reduce (for protonation)
 WORKDIR /install
-RUN ["wget", "-O", "reduce.gz", "http://kinemage.biochem.duke.edu/php/downlode-3.php?filename=/../downloads/software/reduce31/reduce.3.23.130521.linuxi386.gz"] && \
-	gunzip reduce.gz &&\
+RUN ["wget", "-O", "reduce.gz", "http://kinemage.biochem.duke.edu/php/downlode-3.php?filename=/../downloads/software/reduce31/reduce.3.23.130521.linuxi386.gz"]
+RUN gunzip reduce.gz && \
 	chmod 755 reduce && \
 	cp reduce /usr/local/bin/
 
 # Install python libraries
-RUN pip3 install ipython Biopython sklearn tensorflow==1.12 networkx open3d StrBioInfo
+RUN pip3 install matplotlib 
+RUN pip3 install ipython Biopython sklearn tensorflow==1.12 networkx open3d 
 
 # Clone masif
 WORKDIR /
