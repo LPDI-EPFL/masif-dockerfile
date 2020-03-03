@@ -57,7 +57,8 @@ RUN pip install StrBioInfo
 
 # Clone masif
 WORKDIR /
-RUN git clone --single-branch https://github.com/LPDI-EPFL/masif
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+RUN git clone https://github.com/LPDI-EPFL/masif
 
 # We need to define the command to launch when we are going to run the image.
 # We use the keyword 'CMD' to do that.
