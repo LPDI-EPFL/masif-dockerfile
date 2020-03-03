@@ -10,7 +10,7 @@ FROM pymesh/pymesh
 # The second parameter '/' is the path where to put the file on the image.
 # Here we put the file at the image root folder.
 
-#RUN git clone --single-branch --branch masif_nomatlab https://github.com/LPDI-EPFL/masif
+#RUN git clone --single-branch https://github.com/LPDI-EPFL/masif
 
 # install necessary dependencies
 RUN apt-get update && \
@@ -30,6 +30,8 @@ RUN cmake -DGET_MSMS=ON apbs
 RUN make
 RUN make install
 RUN cp -r /install/apbs-pdb2pqr/apbs/externals/mesh_routines/msms/msms_i86_64Linux2_2.6.1 /root/msms/
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python2.7 get-pip.py
 
 # INSTALL PDB2PQR
 WORKDIR /install/apbs-pdb2pqr/pdb2pqr
@@ -51,10 +53,11 @@ RUN gunzip reduce.gz && \
 # Install python libraries
 RUN pip3 install matplotlib 
 RUN pip3 install ipython Biopython sklearn tensorflow==1.12 networkx open3d 
+RUN pip install StrBioInfo 
 
 # Clone masif
 WORKDIR /
-RUN git clone --single-branch --branch masif_nomatlab https://github.com/LPDI-EPFL/masif
+RUN git clone --single-branch https://github.com/LPDI-EPFL/masif
 
 # We need to define the command to launch when we are going to run the image.
 # We use the keyword 'CMD' to do that.
