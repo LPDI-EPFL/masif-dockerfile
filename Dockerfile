@@ -14,7 +14,7 @@ FROM pymesh/pymesh
 
 # install necessary dependencies
 RUN apt-get update && \
-	apt-get install -y wget git unzip cmake vim
+	apt-get install -y wget git unzip cmake vim libgl1-mesa-glx
 	
 	
 
@@ -52,8 +52,8 @@ RUN gunzip reduce.gz && \
 
 # Install python libraries
 RUN pip3 install matplotlib 
-RUN pip3 install ipython Biopython sklearn tensorflow==1.12 networkx open3d 
-RUN pip install StrBioInfo 
+RUN pip3 install ipython Biopython sklearn tensorflow==1.12 networkx open3d packaging
+#RUN pip install StrBioInfo 
 
 # Clone masif
 WORKDIR /
