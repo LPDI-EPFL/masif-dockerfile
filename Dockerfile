@@ -35,6 +35,7 @@ RUN python2.7 get-pip.py
 
 # INSTALL PDB2PQR
 WORKDIR /install/apbs-pdb2pqr/pdb2pqr
+RUN git checkout b3bfeec
 RUN python2.7 scons/scons.py install
 
 # Setup environment variables 
