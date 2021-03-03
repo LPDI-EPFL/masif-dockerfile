@@ -16,22 +16,24 @@ FROM pymesh/pymesh
 RUN apt-get update && \
 	apt-get install -y wget git unzip cmake vim libgl1-mesa-glx
 	
-	
-
-
 # DOWNLOAD/INSTALL APBS
 RUN mkdir /install
 WORKDIR /install
 RUN git clone https://github.com/Electrostatics/apbs-pdb2pqr
 WORKDIR /install/apbs-pdb2pqr
+RUN ls
 RUN git submodule init
 RUN git submodule update
+RUN git checkout b3bfeec
+#RUN git checkout aa35394
+RUN ls
+#RUN git checkout tags/vAPBS-1.5.0
 RUN cmake -DGET_MSMS=ON apbs
 RUN make
 RUN make install
 RUN cp -r /install/apbs-pdb2pqr/apbs/externals/mesh_routines/msms/msms_i86_64Linux2_2.6.1 /root/msms/
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-RUN python2.7 get-pip.py
+RUN python get-pip.py
 
 # INSTALL PDB2PQR
 WORKDIR /install/apbs-pdb2pqr/pdb2pqr
