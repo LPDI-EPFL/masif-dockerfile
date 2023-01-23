@@ -14,7 +14,7 @@ FROM pymesh/pymesh
 
 # install necessary dependencies
 RUN apt-get update && \
-	apt-get install -y wget git unzip cmake vim libgl1-mesa-glx
+	apt-get install -y wget git unzip cmake vim libgl1-mesa-glx dssp
 	
 # DOWNLOAD/INSTALL APBS
 RUN mkdir /install
@@ -22,17 +22,15 @@ WORKDIR /install
 RUN git clone https://github.com/Electrostatics/apbs-pdb2pqr
 WORKDIR /install/apbs-pdb2pqr
 RUN ls
+RUN git checkout b3bfeec
 RUN git submodule init
 RUN git submodule update
-RUN git checkout b3bfeec
-#RUN git checkout aa35394
 RUN ls
-#RUN git checkout tags/vAPBS-1.5.0
 RUN cmake -DGET_MSMS=ON apbs
 RUN make
 RUN make install
 RUN cp -r /install/apbs-pdb2pqr/apbs/externals/mesh_routines/msms/msms_i86_64Linux2_2.6.1 /root/msms/
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN curl https://bootstrap.pypa.io/pip/3.6/get-pip.py -o get-pip.py
 RUN python get-pip.py
 
 # INSTALL PDB2PQR
@@ -48,23 +46,24 @@ ENV PDB2PQR_BIN /root/pdb2pqr/pdb2pqr.py
 
 # DOWNLOAD reduce (for protonation)
 WORKDIR /install
-RUN ["wget", "-O", "reduce.gz", "http://kinemage.biochem.duke.edu/php/downlode-3.php?filename=/../downloads/software/reduce31/reduce.3.23.130521.linuxi386.gz"]
-RUN gunzip reduce.gz && \
-	chmod 755 reduce && \
-	cp reduce /usr/local/bin/
+RUN git clone https://github.com/rlabduke/reduce.git
+WORKDIR /install/reduce
+RUN make install
+RUN mkdir -p /install/reduce/build/reduce
+WORKDIR /install/reduce/build/reduce
+RUN cmake /install/reduce/reduce_src
+WORKDIR /install/reduce/reduce_src
+RUN make
+RUN make install
 
 # Install python libraries
 RUN pip3 install matplotlib 
-RUN pip3 install ipython Biopython sklearn tensorflow==1.12 networkx open3d packaging
+RUN pip3 install ipython Biopython sklearn tensorflow==1.12 networkx open3d==0.8.0.0 dask==1.2.2 packaging
 #RUN pip install StrBioInfo 
 
 # Clone masif
 WORKDIR /
-ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN git clone https://github.com/LPDI-EPFL/masif
 
 # We need to define the command to launch when we are going to run the image.
 # We use the keyword 'CMD' to do that.
-WORKDIR /masif
 CMD [ "bash" ]
-
